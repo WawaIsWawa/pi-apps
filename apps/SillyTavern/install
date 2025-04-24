@@ -1,0 +1,44 @@
+#!/bin/bash
+echo '                                   
+                                   
+////////                   ////////
+,//     +/               /+     //"
+          /             /          
+           //  "/ /;  //           
+  "///    -/     /     /-    ////  
+   ///+  /`/  ~  /  ^  / /" +///   
+        /   ///  /  ///   /        
+       //+@@@@@@@Z@@@@@@@///       
+ ///   /+ @@     /  @@@   //   /// 
+ ///   /  @@@@@@@/  @@@ `  /   ///   SillyTavern
+       */    / @@/  @@@   /"       
+       /- @@@@@@@/  @@@   ./       
+ -///~_:/  /  ;/ / /*  /  /,_~///- 
+ ////    ///     /     !/"    //// 
+           /;   / /   */           
+          ~/           /"          
+  //     /:             "/     //  
+ +///////                 ///////~ 
+                                   
+                                   '
+read -n1 -p "Stable (s) or Dev (d)? [s,d]" doit
+
+case $doit in  
+  s|S) git clone --verbose --progress https://github.com/SillyTavern/SillyTavern/ || error 'Failed to clone repository!' ;; 
+  d|D) git clone --verbose --progress -b staging https://github.com/SillyTavern/SillyTavern/ || error 'Failed to clone repository!' ;; 
+  *) git clone --verbose --progress https://github.com/SillyTavern/SillyTavern/ || error 'Failed to clone "Stable" repository!' ;;
+esac
+
+
+# Install some packages that are necessary to run this app - no need for "error", as the install_packages function already handles errors.
+install_packages nodejs npm || error "Error when installing packages"
+
+echo "[Desktop Entry]
+Name=SillyTavern
+Exec=cd SillyTavern && bash start.sh
+Terminal=true
+Type=Application
+Icon=turbowarp-desktop
+Comment=TurboWarp is a Scratch mod with a compiler to run projects faster, dark mode for your eyes, a bunch of addons to improve the editor, and more.
+Categories=Development;
+" | sudo tee /usr/share/applications/sillytavern.desktop
